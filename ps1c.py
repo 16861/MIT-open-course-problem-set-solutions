@@ -1,7 +1,7 @@
 # pylint: disable=invalid-name
 
 RETURN_RATE = 0.04
-RISE = 0.07
+SALARY_RISE = 0.07
 DOWN_PAYMENT_PERCENT = 0.25
 RETURN_RATE = 0.04
 COST = 1000000
@@ -19,7 +19,6 @@ def bisection(salary=300000):
     docstring
     """
     tries = 0
-    saving_rate = 10000
     target_amount = COST*DOWN_PAYMENT_PERCENT
     upperBound = 10000
     lowerBound = 1
@@ -28,15 +27,22 @@ def bisection(salary=300000):
         month = 36
         savings = 0
         for_iter_salary = salary
+        # main cycle for getting savings
         while month > 0:
             if savings >= target_amount:
                 break
             savings += (savings*RETURN_RATE/12)+for_iter_salary/12*(saving_rate*0.0001)
             month -= 1
+
+            #salary grows each 6 month
             if month % 6 == 0:
-                for_iter_salary += for_iter_salary*RISE
+                for_iter_salary += for_iter_salary*SALARY_RISE
+
+        # if saving within predetermined conditions then task is done returb result
         if savings > target_amount-100 and savings < target_amount+100:
             return (round(saving_rate*0.0001, 4), tries)
+
+        # if not then use bisection search algorithm to evaluate proper saving_rate
         elif savings > target_amount:
             if saving_rate == upperBound:
                 saving_rate -= int(upperBound/2)
